@@ -1,4 +1,5 @@
--- 5. PROCESADOR
+USE LaptopDeel;
+
 CREATE TABLE PROCESADOR (
     id_procesador INT IDENTITY(1,1) PRIMARY KEY,
     marca         VARCHAR(50) NOT NULL,
@@ -13,7 +14,6 @@ CREATE TABLE PROCESADOR (
 );
 GO
 
--- 6. PANTALLA
 CREATE TABLE PANTALLA (
     id_pantalla   INT IDENTITY(1,1) PRIMARY KEY,
     pulgadas      DECIMAL(4,1) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE PANTALLA (
 );
 GO
 
--- 7. TARJETA_GRAFICA
+
 CREATE TABLE TARJETA_GRAFICA (
     id_tarjeta_grafica INT IDENTITY(1,1) PRIMARY KEY,
     marca              VARCHAR(50) NOT NULL,
@@ -36,7 +36,7 @@ CREATE TABLE TARJETA_GRAFICA (
 );
 GO
 
--- 8. RAM
+
 CREATE TABLE RAM (
     id_ram     INT IDENTITY(1,1) PRIMARY KEY,
     generacion VARCHAR(20) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE RAM (
 );
 GO
 
--- 9. ALMACENAMIENTO
+
 CREATE TABLE ALMACENAMIENTO (
     id_almacenamiento INT IDENTITY(1,1) PRIMARY KEY,
     tipo              VARCHAR(20) NOT NULL,
