@@ -36,3 +36,11 @@ CREATE TABLE CLIENTE (
     CONSTRAINT Ck_Cliente_Iva CHECK (IVA IN ('Responsable Inscripto', 'Monotributo', 'Consumidor Final', 'Exento'))
 );
 GO
+
+ -- 4. CATEGORIA
+CREATE TABLE CATEGORIA (
+    id_categoria INT IDENTITY(1,1) PRIMARY KEY,
+    nombre       VARCHAR(50) NOT NULL UNIQUE,
+    descripcion  VARCHAR(200)
+);
+GO
