@@ -1,6 +1,6 @@
-CREATE DATABASE LaptopDeelPrueba;
+CREATE DATABASE LaptopDeel;
 
-USE LaptopDeelPrueba;
+USE LaptopDeel;
 
 -- 1. ROL
 CREATE TABLE ROL (
@@ -33,6 +33,6 @@ CREATE TABLE CLIENTE (
     Direccion  VARCHAR(150),
     IVA        VARCHAR(30),
     DNI        VARCHAR(10) NOT NULL UNIQUE,
-    CONSTRAINT CK_Cliente_Iva CHECK (IVA IN ('Responsable Inscripto', 'Monotributo', 'Consumidor Final', 'Exento'))
+    CONSTRAINT Ck_Cliente_Iva CHECK (IVA IN ('Responsable Inscripto', 'Monotributo', 'Consumidor Final', 'Exento'))
 );
 GO
