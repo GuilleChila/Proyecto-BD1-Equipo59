@@ -17,12 +17,10 @@ CREATE TABLE NOTEBOOK (
 );
 GO
 
-
 CREATE TABLE NOTEBOOK_CATEGORIA (
     id_notebook  INT NOT NULL,
     id_categoria INT NOT NULL,
     CONSTRAINT PK_NotebookCategoria PRIMARY KEY (id_notebook, id_categoria),
-    CONSTRAINT UQ_NotebookCategoria_Notebook UNIQUE (id_notebook),
     CONSTRAINT FK_NotebookCategoria_Notebook  FOREIGN KEY (id_notebook)  REFERENCES NOTEBOOK(id_notebook),
     CONSTRAINT FK_NotebookCategoria_categoria FOREIGN KEY (id_categoria) REFERENCES CATEGORIA(id_categoria)
 );
