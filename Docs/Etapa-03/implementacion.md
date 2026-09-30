@@ -14,9 +14,9 @@ Los scripts se encuentran en la carpeta `SQL/DDL/` del repositorio y deben ejecu
 
 | Orden | Archivo | Contenido |
 |:---:|---|---|
-| 1 | `Implementacion-Paso1.sql` | Crea la base de datos `LaptopDeel` y las tablas de **catálogo base**: `ROL`, `USUARIO`, `CLIENTE`,  |
+| 1 | `Implementacion-Paso1.sql` | Crea la base de datos `LaptopDeel` y las tablas de **catálogo base**: `ROL`, `USUARIO`, `CLIENTE`,`CATEGORIA`,  |
 | 2 | `Implementacion-Paso2.sql` | Crea las tablas de **hardware**: `PROCESADOR`, `PANTALLA`, `TARJETA_GRAFICA`, `RAM`, `ALMACENAMIENTO` |
-| 3 | `Implementacion-Paso3.sql` | Crea la tabla **`NOTEBOOK`** y las tablas asociativas de componentes: `CATEGORIA`, `NOTEBOOK_CATEGORIA`, `NOTEBOOK_RAM`, `NOTEBOOK_ALMACENAMIENTO` |
+| 3 | `Implementacion-Paso3.sql` | Crea la tabla **`NOTEBOOK`** y las tablas asociativas de componentes: `NOTEBOOK_CATEGORIA`, `NOTEBOOK_RAM`, `NOTEBOOK_ALMACENAMIENTO` |
 | 4 | `Implementacion-Paso4.sql` | Crea las tablas del **módulo de ventas**: `VENTA`, `VENTA_METODO_PAGO`, `DETALLE_VENTA` |
 | 5 | `Implementacion-Paso5.sql` | **Carga inicial de datos** (DML) en todas las tablas, en el orden correcto según las dependencias de claves foráneas |
 
