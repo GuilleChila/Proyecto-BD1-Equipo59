@@ -1,3 +1,5 @@
+use LaptopDeel
+
 -- 14. VENTA
 CREATE TABLE VENTA (
     id_venta    INT IDENTITY(1,1) PRIMARY KEY,
