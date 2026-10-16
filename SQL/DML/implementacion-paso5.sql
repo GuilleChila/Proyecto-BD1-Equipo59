@@ -1,4 +1,5 @@
 -- PASO 5: Poblado inicial (DML)
+use LaptopDeel
 
 -- Clases Padre no tienen dependencias
 INSERT INTO ROL (descripcion) VALUES
@@ -113,7 +114,7 @@ SELECT * FROM CLIENTE;
 
 -- ESTO DEBE FALLAR: el rol no existe
 INSERT INTO USUARIO (Nombre, Apellido, Correo, clave, fecha_nacimiento, DNI, id_Rol)
-VALUES ('Test', 'Test', 'test@test.com', 'x', '2000-01-01', '99999999', 99);
+VALUES ('Test', 'Test', 'test@test.com', 'x', '2000-01-01', '99999999', 2);
 GO
 
 -- Cargamos notebook, depende de procesador, pantalla y tarjeta grafica
