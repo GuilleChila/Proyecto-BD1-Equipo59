@@ -112,7 +112,7 @@ GO
 
 SELECT * FROM CLIENTE;
 
--- ESTO DEBE FALLAR: el rol no existe
+
 INSERT INTO USUARIO (Nombre, Apellido, Correo, clave, fecha_nacimiento, DNI, id_Rol)
 VALUES ('Test', 'Test', 'test@test.com', 'x', '2000-01-01', '99999999', 2);
 GO
