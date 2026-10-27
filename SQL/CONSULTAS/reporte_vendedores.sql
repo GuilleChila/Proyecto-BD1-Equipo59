@@ -38,3 +38,4 @@ WHERE v.estado = 'Confirmada'
 GROUP BY cat.nombre
 ORDER BY [Total Facturado] DESC;
 GO  
+
