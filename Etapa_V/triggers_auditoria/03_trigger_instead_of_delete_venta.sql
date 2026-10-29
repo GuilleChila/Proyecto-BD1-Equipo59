@@ -2,8 +2,7 @@
 -- Tabla:     VENTA
 -- Tipo:      INSTEAD OF DELETE
 -- Objetivo:  Las ventas no se eliminan físicamente de la base de datos.
---            Forman parte del historial comercial de LaptopDeel y deben
---            poder reconstruirse (facturación, auditorías, reclamos).
+--            Forman parte del historial comercial de LaptopDeel.
 --            Si se necesita cancelar una venta, se debe cambiar su estado
 --            a 'Anulada', no borrar el registro.
 USE LaptopDeel;
