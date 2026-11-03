@@ -3,6 +3,31 @@ use LaptopDeel;
 ------------------
 --procedimientos--
 ------------------
+-- PROCEDIMIENTO: Registrar venta simple
+CREATE OR ALTER PROCEDURE dbo.sp_RegistrarVentaSimple
+    @id_cliente INT, @id_usuario INT, @id_notebook INT, @cantidad INT, @metodo_pago NVARCHAR(50)
+AS
+BEGIN
+    DECLARE @precio DECIMAL(12,2);
+    DECLARE @id_venta INT;
+
+    SELECT @precio = precio FROM NOTEBOOK WHERE id_notebook = @id_notebook;
+
+    INSERT INTO VENTA (estado, monto_total, id_usuario, id_Cliente) 
+    VALUES ('Confirmada', (@precio * @cantidad), @id_usuario, @id_cliente);
+    SET @id_venta = SCOPE_IDENTITY();
+
+    INSERT INTO VENTA_METODO_PAGO (id_venta, metodo_pago) VALUES (@id_venta, @metodo_pago);
+    INSERT INTO DETALLE_VENTA (id_notebook, id_venta, cantidad, precio_unitario) VALUES (@id_notebook, @id_venta, @cantidad, @precio);
+
+    PRINT 'Venta registrada con ID: ' + CAST(@id_venta AS VARCHAR);
+END;
+GO
+
+-- PRUEBA DEL PROCEDIMIENTO
+EXEC dbo.sp_RegistrarVentaSimple @id_cliente = 1, @id_usuario = 2, @id_notebook = 1, @cantidad = 1, @metodo_pago = 'Efectivo';
+GO
+
 
 // Procedimiento para insertar una notebook en la base de datos
 
