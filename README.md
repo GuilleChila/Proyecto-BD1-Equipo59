@@ -42,13 +42,13 @@ El sistema garantiza:
 
 ## Estado del Proyecto
 
-| Etapa | Contenido | Estado |
-|---|---|---|
-| [Etapa 01](#etapa-01--requerimientos) — Requerimientos | Descripción del caso, alcance y reglas de negocio | ✅ Completado |
-| [Etapa 02](#etapa-02--modelado) — Modelado | DER, modelo relacional y normalización | ✅ Completado |
-| [Etapa 03](#etapa-03--implementación) — Implementación | Scripts DDL/DML y pruebas de validación | ✅ Completado |
-| [Etapa 04](#etapa-04--consultas) — Consultas | Casos de uso y scripts de consulta (JOIN, GROUP BY, HAVING) | ✅ Completado |
-| Etapa 05 — Temas técnicos | Procedimientos, funciones, transacciones, triggers, seguridad e índices | ⏳ En desarrollo |
+| Etapa | Contenido | 
+|---|---
+| [Etapa 01](#etapa-01--requerimientos) — Requerimientos | Descripción del caso, alcance y reglas de negocio | 
+| [Etapa 02](#etapa-02--modelado) — Modelado | DER, modelo relacional y normalización | 
+| [Etapa 03](#etapa-03--implementación) — Implementación | Scripts DDL/DML y pruebas de validación |
+| [Etapa 04](#etapa-04--consultas) — Consultas | Casos de uso y scripts de consulta (JOIN, GROUP BY, HAVING) |
+| [Etapa 05](#etapa-05--temas-técnicos) — Temas técnicos | Procedimientos y funciones, transacciones, triggers de auditoría, seguridad e índices |
 
 ---
 
@@ -102,6 +102,66 @@ Resuelve tres necesidades de información del negocio mediante scripts `SELECT`:
 | [informe-ventas.md](Docs/Etapa-04/informe-ventas.md) | Necesidad, estrategia SQL y resultado esperado del reporte por vendedor |
 | [consulta-avanzada.md](Docs/Etapa-04/consulta-avanzada.md) | Necesidad, estrategia SQL y resultado esperado del ranking por categoría |
 
+### Etapa 05 — Temas técnicos
+
+Se incorpora mecanismos avanzados de SQL Server para que la base sea más robusta, segura y fácil de mantener. Cada tema tiene su propia carpeta con un documento de investigación (definición, ventajas, caso aplicado a LaptopDeel y resultados), el script SQL de implementación y las capturas de evidencia de las pruebas.
+
+#### Procedimientos y funciones almacenadas
+
+Centralizan la lógica de negocio en la base: tres procedimientos para dar de alta, modificar y desactivar notebooks, un procedimiento para registrar una venta simple y tres funciones de cálculo (estado de stock, estadísticas de compras de un cliente y ventas anuales). Se compara además la carga de datos con `INSERT` directos contra la carga mediante procedimientos.
+
+| Archivo | Descripción |
+|---|---|
+| [investigacion_procedimientos_y_funciones_almacenadas.md](Etapa_V/procedimientos_funciones/investigacion_procedimientos_y_funciones_almacenadas.md) | Definiciones, ventajas y diferencias entre procedimientos y funciones |
+| [scrips.sql](Etapa_V/procedimientos_funciones/scrips.sql) | Creación de los procedimientos y funciones |
+| [PoblacionInsert.sql](Etapa_V/procedimientos_funciones/PoblacionInsert.sql) | Carga de datos con `INSERT` directos, con métricas de tiempo |
+| [PoblacionSP.sql](Etapa_V/procedimientos_funciones/PoblacionSP.sql) | Carga de datos invocando los procedimientos, con métricas de tiempo |
+| [analisis.md](Etapa_V/procedimientos_funciones/Evidencias/analisis.md) | Análisis de rendimiento: inserción directa vs. procedimientos |
+| [Evidencias](Etapa_V/procedimientos_funciones/Evidencias) | Capturas de las ejecuciones y de los tiempos |
+
+#### Manejo de transacciones
+
+Garantiza que una venta se registre completa o no se registre: el procedimiento `RegistrarVenta` valida el stock, crea la venta, inserta el detalle y descuenta el stock dentro de una transacción con `TRY/CATCH`. Se prueba un caso exitoso (`COMMIT`) y uno fallido por stock insuficiente (`ROLLBACK`) para demostrar la atomicidad.
+
+| Archivo | Descripción |
+|---|---|
+| [investigacion.md](Etapa_V/transacciones/investigacion.md) | Conceptos (ACID), caso aplicado a LaptopDeel y conclusiones |
+| [scripts.sql](Etapa_V/transacciones/scripts.sql) | Procedimiento `RegistrarVenta` y pruebas exitosa y fallida |
+| [resultado_pruebas.md](Etapa_V/transacciones/evidencias/resultado_pruebas.md) | Detalle de cada prueba y su resultado |
+| [evidencias](Etapa_V/transacciones/evidencias) | Capturas del `COMMIT`, del `ROLLBACK` y del estado de los datos |
+
+#### Triggers de auditoría
+
+Tres triggers sobre tres tablas: `AFTER UPDATE` sobre `NOTEBOOK` (guarda los valores anteriores y nuevos de cada modificación), `AFTER DELETE` sobre `CLIENTE` (conserva los datos del cliente eliminado) e `INSTEAD OF DELETE` sobre `VENTA` (impide eliminar ventas). Los dos de auditoría registran además la fecha, la hora y el usuario que hizo el cambio.
+
+| Archivo | Descripción |
+|---|---|
+| [investigacion.md](Etapa_V/triggers_auditoria/investigacion.md) | Definición, ventajas, caso aplicado y resultados de los tres triggers |
+| [01_trigger_after_update_notebook.sql](Etapa_V/triggers_auditoria/01_trigger_after_update_notebook.sql) | Auditoría de modificaciones de notebooks |
+| [02_trigger_after_delete_cliente.sql](Etapa_V/triggers_auditoria/02_trigger_after_delete_cliente.sql) | Auditoría de eliminaciones de clientes |
+| [03_trigger_instead_of_delete_venta.sql](Etapa_V/triggers_auditoria/03_trigger_instead_of_delete_venta.sql) | Bloqueo de eliminación de ventas |
+| [evidencias](Etapa_V/triggers_auditoria/evidencias) | Capturas de las pruebas de cada trigger |
+
+#### Seguridad: usuarios y roles
+
+Aplica el principio de mínimo privilegio. Con permisos directos, un usuario de solo lectura no puede hacer un `INSERT` sobre `VENTA`, pero sí registrar una venta ejecutando el procedimiento autorizado. Con roles, el rol `rol_consulta_notebooks` permite consultar a quien pertenece a él y deniega el acceso a quien no.
+
+| Archivo | Descripción |
+|---|---|
+| [investigacion.md](Etapa_V/seguridad/investigacion.md) | Permisos a nivel de usuarios y de roles, y caso aplicado a LaptopDeel |
+| [scripts.sql](Etapa_V/seguridad/scripts.sql) | Creación de logins, usuarios, rol, permisos y pruebas |
+| [evidencias](Etapa_V/seguridad/evidencias) | Capturas de las pruebas exitosas y fallidas de cada usuario |
+
+#### Índices y optimización de consultas
+
+Mide el efecto de los índices sobre una consulta por período en una tabla de prueba con 1.000.000 de registros, comparando tres escenarios: sin índice (`Table Scan`), con un índice agrupado sobre la fecha (`Clustered Index Seek`) y con un índice no agrupado de cobertura (`Index Seek`). Se registran tiempos, lecturas lógicas y planes de ejecución.
+
+| Archivo | Descripción |
+|---|---|
+| [investigacion.md](Etapa_V/indices_optimizacion/investigacion.md) | Conceptos, comparación de los tres escenarios y conclusiones |
+| [indexacion_optimizacion.sql](Etapa_V/indices_optimizacion/indexacion_optimizacion.sql) | Tabla de prueba, carga masiva y los tres escenarios |
+| [evidencias](Etapa_V/indices_optimizacion/evidencias) | Capturas de mensajes y planes de ejecución |
+
 ---
 
 
@@ -138,6 +198,32 @@ Resuelve tres necesidades de información del negocio mediante scripts `SELECT`:
 │       ├── Factura.sql
 │       ├── reporte_vendedores.sql
 │       └── NotebookMasVendidaPorCategoria.sql
+│
+├── Etapa_V/
+│   ├── procedimientos_funciones/
+│   │   ├── investigacion_procedimientos_y_funciones_almacenadas.md
+│   │   ├── scrips.sql
+│   │   ├── PoblacionInsert.sql
+│   │   ├── PoblacionSP.sql
+│   │   └── Evidencias/
+│   ├── transacciones/
+│   │   ├── investigacion.md
+│   │   ├── scripts.sql
+│   │   └── evidencias/
+│   ├── triggers_auditoria/
+│   │   ├── investigacion.md
+│   │   ├── 01_trigger_after_update_notebook.sql
+│   │   ├── 02_trigger_after_delete_cliente.sql
+│   │   ├── 03_trigger_instead_of_delete_venta.sql
+│   │   └── evidencias/
+│   ├── seguridad/
+│   │   ├── investigacion.md
+│   │   ├── scripts.sql
+│   │   └── evidencias/
+│   └── indices_optimizacion/
+│       ├── investigacion.md
+│       ├── indexacion_optimizacion.sql
+│       └── evidencias/
 │
 └── README.md
 ```
